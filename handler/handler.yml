@@ -1,0 +1,8 @@
+---
+    - name: mq notify service
+      service:
+           name: "{{ project_notify_service }}"
+           state: "{{ project_notify_service_state }}"
+
+
+

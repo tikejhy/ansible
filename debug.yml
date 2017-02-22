@@ -1,0 +1,12 @@
+---
+
+- hosts: all 
+  gather_facts: true
+  become: true
+  tasks:
+
+    - include_vars: "dir={{ static_vars }}"
+    - name: mq_package_to_install
+      debug: msg={{ mq_package_to_install }}
+    - name: package_to_install
+      debug: msg={{ package_to_install }}

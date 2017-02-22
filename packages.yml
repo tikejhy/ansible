@@ -1,0 +1,27 @@
+---
+- hosts: all 
+  become: true
+
+  tasks:
+   
+    - include_vars: "dir={{ static_vars }}"
+    - name: Install list of packages
+      yum: name={{item}} state=installed update_cache=yes
+      with_items:
+         - "{{ package_to_install }}"
+      register: task
+      tags:
+         - package_installation
+    
+    - debug: 
+        msg: "I was here {{task.changed}}"
+      with_items: task.changed
+      when: task.changed == True 
+      notify: 
+         - '"{{project}}" notify service'
+      tags:
+         - restart
+
+  handlers:
+    -  include: handler/handler.yml
+

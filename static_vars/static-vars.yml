@@ -1,0 +1,2 @@
+---
+   local_config_source: /etc/ansible/repo/{{ sprint }}/{{ project }}/proj.conf

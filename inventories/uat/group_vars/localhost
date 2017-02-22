@@ -1,0 +1,6 @@
+---
+sprint: sprint-0
+login_host: mysql-host
+config_file: /root/mysql-config
+name: db1
+backuptables: "{{ backup_tables | default('echo NA') }}"

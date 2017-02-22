@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  become: no
+  connection: local
+  tasks:
+    - name: Backup Tables
+      shell: mysqldump --defaults-file={{ defaultfile }} {{ item.db }} {{ item.tables }} | gzip > /backup/ansibleBackup/{{ item.db }}_{{ item.tables }}_{{ansible_date_time.date}}.sql.gz
+      with_items: "{{ backuptables }}"

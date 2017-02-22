@@ -1,0 +1,32 @@
+---
+- hosts: all 
+
+  become: true
+  tasks:
+          
+    - include_vars: 
+        dir: "{{ static_vars }}"
+    - stat: 
+        path: "{{ config_source }}_{{ansible_date_time.date}}"
+      register: backup_copy 
+    - name: Create Backup of old Config
+      command: cp {{ config_source }} {{ config_source }}_{{ansible_date_time.date}}
+      when: backup_copy.stat.exists == False
+      tags:
+        - config_backup
+        
+    - local_action: "stat path={{ local_config_source }}"
+      register: local_config_to_copy 
+    - name: Copy new config if exists
+      copy: 
+        src: "{{ local_config_source }}"
+        dest: "{{ config_source }}"
+      when: local_config_to_copy.stat.exists == True
+      notify:
+         - "{{project}} notify service"
+      tags:
+        - config
+        - restart
+
+  handlers:
+    - include: ./handler/handler.yml

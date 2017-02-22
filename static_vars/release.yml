@@ -1,0 +1,19 @@
+---
+sprint: sprint-1
+
+backup_tables:
+ - db: db1
+   tables:
+    - "table1"
+    - "table2"
+    - "table3"
+ - db: db2
+   tables:
+    - "table4" 
+    - "table5" 
+
+tasks_to_run:
+  - [ /bin/bash -x /tmp/test.sh ]
+    
+package_to_install:
+  - [ 'wget' ]

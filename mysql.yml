@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  become: no
+  connection: local
+  gather_facts: False
+  tasks:
+    - stat:
+        path: "{{ target }}"
+      register: st
+    - name: Run SQL commands against DB
+      mysql_db:
+        login_host: "{{ login_host }}"
+        config_file: "{{ config_file }}"
+        name: "{{ name }}"
+        state: import
+        target: "{{ target }}"
+      when: st.stat.exists
+      tags:
+        - mysql_import

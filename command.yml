@@ -1,0 +1,14 @@
+---
+- hosts: all 
+  become: true
+  gather_facts: False
+  tasks:
+    - include_vars: "dir={{ static_vars }}"
+    - name: execution of commands
+      command: "{{ item }}"
+      with_items: "{{ tasks_to_run }}"
+      register: outp
+    - debug: var={{outp.results}}
+      with_items: "{{ outp }}"
+      tags:
+         - commands

@@ -1,0 +1,11 @@
+---
+project: mq
+
+config_source: "{{ config_source | default('someconfig.conf') }}"
+local_config_source: "{{ local_config_source | default('/etc/ansible/repo/someconfig.conf') }}"
+tasks_to_run: "{{ tasks_to_run | default('echo NA') }}"
+package_to_install: "{{ package_to_install | default('strace') }}"
+
+project_notify_service: httpd
+project_notify_service_state: restarted
+static_vars: static_vars
