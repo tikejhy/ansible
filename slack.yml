@@ -1,0 +1,24 @@
+---
+- hosts: all 
+  become: true
+  gather_facts: False
+  tasks:
+    - block:      
+      - include_vars: "dir={{ static_vars }}"
+      - name: execution of commands
+        command: "{{ item }}"
+        run_once: true
+        with_items: "{{ tasks_to_run }}"
+        register: outp
+      - debug: 
+            msg: "Start of command Execution-> {{item.start}} \n STDOUT LINES-> {{item.stdout_lines}} \n STDERR -> {{item.stderr}} End of command Execution -> {{item.end}}"
+        with_items: "{{ outp.results }}"
+
+      rescue:  
+         - name: notify slack 
+           slack:
+                channel: channelName
+                token: "XXXXX/XXXXXX/XXXXXXXXXXXXXXXXXXXXXXXXXXXXX" 
+                msg: "Start of command Execution-> {{item.start}} \n STDOUT LINES-> {{item.stdout_lines}} \n STDERR -> {{item.stderr}} \n End of command Execution -> {{item.end}}"
+           with_items: "{{ outp.results }}"
+           delegate_to: localhost
